@@ -83,13 +83,15 @@ function Get-GITParameterHint {
 		{
 			switch -RegEx ($line) {
 				# -p, --param   This is the parameter p
-				"^(-.), --([^\s\[]+)\s+([^<]*)$" {
+				# -p, --[no-]param   This is the parameter p
+				"^(-.), --(?:\[no-\]){0,1}([^\s\[]+)\s+([^<]*)$" {
 					$helpTable.add($matches[1], @(($matches[1] +" ("+ $matches[2] +")"), $matches[3]))
 					$helpTable.add("--"+$matches[2], @(("--"+ $matches[2]), $matches[3]))
 					break
 				}
 				# --param   This is the parameter p
-				"^--([^\s\[]+)\s+([^<]*)$" {
+				# --[no-]param   This is the parameter p
+				"^--(?:\[no-\]){0,1}([^\s\[]+)\s+([^<]*)$" {
 					$helpTable.add("--"+$matches[1], @(("--"+ $matches[1]), $matches[2]))
 					break
 				}
@@ -99,13 +101,15 @@ function Get-GITParameterHint {
 					break
 				}
 				# -p, --param <file>     This is the parameter p
-				"^(-.), --([^\s\[]+)\s(<[^>]*>)\s+(.*)$" {
+				# -p, --[no-]param <file>     This is the parameter p
+				"^(-.), --(?:\[no-\]){0,1}([^\s\[]+)\s(<[^>]*>)\s+(.*)$" {
 					$helpTable.add($matches[1], @(($matches[1] +" ("+ $matches[2] +")"), ($matches[3]+" | "+$matches[4])))
 					$helpTable.add("--"+$matches[2], @(("--"+ $matches[2]), ($matches[3]+" | "+$matches[4])))
 					break
 				}
 				# --param <file>     This is the parameter p
-				"^--([^\s\[]+)\s(<[^>]*>)\s+(.*)$" {
+				# --[no-]param <file>     This is the parameter p
+				"^--(?:\[no-\]){0,1}([^\s\[]+)\s(<[^>]*>)\s+(.*)$" {
 					$helpTable.add("--"+$matches[1], @(("--"+ $matches[1]), ($matches[2]+" | "+$matches[3])))
 					break
 				}
@@ -115,13 +119,15 @@ function Get-GITParameterHint {
 					break
 				}
 				# -p, --param[=foo]     This is the parameter p
-				"^(-.), --([^\s\[]+)(\[[^\]]*\])\s+(.*)$" {
+				# -p, --[no-]param[=foo]     This is the parameter p
+				"^(-.), --(?:\[no-\]){0,1}([^\s\[]+)(\[[^\]]*\])\s+(.*)$" {
 					$helpTable.add($matches[1], @(($matches[1] +" ("+ $matches[2] +")"), ($matches[3]+" | "+$matches[4])))
 					$helpTable.add("--"+$matches[2], @(("--"+ $matches[2]), ($matches[3]+" | "+$matches[4])))
 					break
 				}
 				# --param[=foo]     This is the parameter p
-				"^--([^\s\[]+)(\[[^\]]*\])\s+(.*)$" {
+				# --[no-]param[=foo]     This is the parameter p
+				"^--(?:\[no-\]){0,1}([^\s\[]+)(\[[^\]]*\])\s+(.*)$" {
 					$helpTable.add("--"+$matches[1], @(("--"+ $matches[1]), ($matches[2]+" | "+$matches[3])))
 					break
 				}
